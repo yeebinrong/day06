@@ -1,5 +1,5 @@
 <div class="con text-center">
-    <h3>Searching for "{{q}}"</h3>
+    <h3>Searching for {{q}} at page {{page}}</h3>
 
     <table class="center">
         {{#if data}}
@@ -23,16 +23,15 @@
             <h1>You have returned no results!</h1>
         {{/if}}
     </table>
-    {{#if data}}
     <div class="con margin">
         <form class="inline-block" action="/search" method="GET">
             {{#if firstpage}}
             <input class="text-lg margin" type="submit" name="s" id="s" value="previous">
             {{/if}}
             <input class="text-lg margin" type="submit" name="s" id="s" value="next">
-            <input type="hidden" name="page" id="page" value="{{page}}">
             <input type="hidden" name="q" id="q" value="{{q}}">
-
+            <input type="hidden" name="page" id="page" value="{{page}}">
+            <input type="hidden" name="prevbtn" id="prevbtn" value="{{prevbtn}}">
+        </form>
     </div>
-    {{/if}}
 </div>

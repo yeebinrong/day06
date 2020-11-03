@@ -58,41 +58,40 @@ app.get('/search',
     async (req, resp) => {
         const q = req.query.q
         const limit = 10
-        let page = parseInt(req.query.page) || 2
+        const prevbtn = req.query.s
+        let page = parseInt(req.query.page) || 1
         let offset = 0
         let conn;
-        console.info("the value of submit is: ", req.query.s)
-        if (page == 1)
+        if ((prevbtn == "previous" && page == 2) || page == 1 && !prevbtn)
             firstpage = 0
         else
             firstpage = 1
 
-        if (req.query.s == "previous")
+        if (prevbtn == "previous")
         {
-            page -= 1   
-            offset = (page - 1) * limit
+            page -= 1
         }
-        else if (req.query.s == "next")
+        else if (prevbtn == "next")
         {
             page += 1
-            offset = page * limit - 10
+            console.info("next : ", page)
         }
-        console.info("offest is 1", offset)
-        console.info("page is 1: ", page)
+
+        offset = (page - 1) * limit
         try {
             conn = await pool.getConnection()
             const results = await conn.query(SQL_FIND_BY_NAME, [`%${q}%`, limit, offset])
             const data = results[0]
-            console.info("sending page: ", page)
+            console.info("next 2: ", page)
             resp.status(200)
             resp.type('text/html')
             resp.render('home',
                 {
                     title : 'Search results',
                     q,
-                    searching : 1, // set state TRUE
                     data,
                     page,
+                    prevbtn,
                     firstpage
                 }
             )
@@ -110,10 +109,9 @@ app.get('/search',
 app.get('/', (req, resp) => {
     resp.status(200)
     resp.type('text/html')
-    resp.render('home',
+    resp.render('index',
         {
             title : 'Search for an app.',
-            searching: 0, // set state FALSE
         }
     )
 })
