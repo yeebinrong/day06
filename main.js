@@ -74,7 +74,6 @@ app.get('/search',
         else if (prevbtn == "next")
         {
             page += 1
-            console.info("next : ", page)
         }
 
         offset = (page - 1) * limit
@@ -82,7 +81,6 @@ app.get('/search',
             conn = await pool.getConnection()
             const results = await conn.query(SQL_FIND_BY_NAME, [`%${q}%`, limit, offset])
             const data = results[0]
-            console.info("next 2: ", page)
             resp.status(200)
             resp.type('text/html')
             resp.render('home',
@@ -111,7 +109,7 @@ app.get('/', (req, resp) => {
     resp.type('text/html')
     resp.render('index',
         {
-            title : 'Search for an app.',
+            title : 'Search for an app.'
         }
     )
 })
